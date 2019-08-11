@@ -18,6 +18,7 @@ public class Vertex {
 	// coordinates in generated grid
 	private int posX;
 	private int posY;
+	
 	// edges connecting to adjacent vertices
 	private Edge edgeNorth;
 	private Edge edgeSouth;
