@@ -1,4 +1,4 @@
-# manhattan-project
+# graphattan
 slightly unreasonable by most people's standards
 
 ## Overview
