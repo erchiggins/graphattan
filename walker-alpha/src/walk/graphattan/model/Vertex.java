@@ -10,12 +10,11 @@ package walk.graphattan.model;
  */
 public class Vertex {
 
-	public Vertex(double posX, double posY, Intersection intersection, String description) {
+	public Vertex(double posX, double posY, Intersection intersection) {
 		super();
 		this.posX = posX;
 		this.posY = posY;
 		this.intersection = intersection;
-		this.description = description;
 	}
 
 	public Vertex() {
@@ -27,8 +26,6 @@ public class Vertex {
 	private double posY;
 	// Intersection of which the Vertex is a corner, may be shared by other Vertices.
 	private Intersection intersection;
-	// Optional description, used for cardinal direction ("SW corner," etc) when appropriate
-	private String description;
 
 	public double getPosX() {
 		return posX;
@@ -54,19 +51,10 @@ public class Vertex {
 		this.intersection = intersection;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((intersection == null) ? 0 : intersection.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(posX);
@@ -85,11 +73,6 @@ public class Vertex {
 		if (getClass() != obj.getClass())
 			return false;
 		Vertex other = (Vertex) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
 		if (intersection == null) {
 			if (other.intersection != null)
 				return false;
@@ -104,8 +87,7 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "Vertex [posX=" + posX + ", posY=" + posY + ", intersection=" + intersection + ", description="
-				+ description + "]";
+		return "Vertex [posX=" + posX + ", posY=" + posY + ", intersection=" + intersection + "]";
 	}
 
 	
