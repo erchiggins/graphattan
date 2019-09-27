@@ -2,20 +2,25 @@ package walk.graphattan.model;
 
 public class Edge {
 	
-	public Edge(double weight, EdgeType type) {
-		this();
+	public Edge(double weight, EdgeType type, Vertex source, Vertex destination) {
+		super();
 		this.weight = weight;
 		this.type = type;
+		this.source = source;
+		this.destination = destination;
 	}
 
 	public Edge() {
 		super();
 	}
 
-	// length of street crossing or sidewalk in feet 
+	// length of crossing or walkway in feet 
 	private double weight;
-	// whether edge represents a street crossing or sidewalk
+	// whether edge represents a crossing or walkway
 	private EdgeType type;
+	// "source" and "destination" Vertices, although CityGraph is undirected
+	private Vertex source;
+	private Vertex destination;
 
 	public double getWeight() {
 		return weight;
@@ -35,34 +40,24 @@ public class Edge {
 
 	@Override
 	public String toString() {
-		return "Edge [weight=" + weight + ", type=" + type + "]";
+		return "Edge [weight=" + weight + ", type=" + type + ", source=" + source + ", destination=" + destination
+				+ "]";
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(weight);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
+	public Vertex getSource() {
+		return source;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Edge other = (Edge) obj;
-		if (type != other.type)
-			return false;
-		if (Double.doubleToLongBits(weight) != Double.doubleToLongBits(other.weight))
-			return false;
-		return true;
+	public void setSource(Vertex source) {
+		this.source = source;
+	}
+
+	public Vertex getDestination() {
+		return destination;
+	}
+
+	public void setDestination(Vertex destination) {
+		this.destination = destination;
 	}
 
 }

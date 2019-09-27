@@ -1,43 +1,78 @@
 package walk.graphattan.model;
 
+/*
+ * The Vertex is the basic building block of the CityGraph, representing a location 
+ * at which a pedestrian's path can branch. Multiple Vertices may be present at the 
+ * intersection of n streets/paths/other non-pedestrian routes, so several Vertices
+ * in the CityGraph will have the same Intersection. 
+ * The position of a Vertex represents the pedestrian's location, not the geographic
+ * center of the Intersection of which the Vertex is a corner.  
+ */
 public class Vertex {
+
+	public Vertex(double posX, double posY, Intersection intersection, String description) {
+		super();
+		this.posX = posX;
+		this.posY = posY;
+		this.intersection = intersection;
+		this.description = description;
+	}
 
 	public Vertex() {
 		super();
 	}
 
-	public Vertex(int posX, int posY) {
-		super();
-		this.posX = posX;
-		this.posY = posY;
-	}
+	// distances in feet from starting position of grid traversal
+	private double posX;
+	private double posY;
+	// Intersection of which the Vertex is a corner, may be shared by other Vertices.
+	private Intersection intersection;
+	// Optional description, used for cardinal direction ("SW corner," etc) when appropriate
+	private String description;
 
-	// distances in feet from origin of traversal
-	private int posX;
-	private int posY;
-
-	public int getPosX() {
+	public double getPosX() {
 		return posX;
 	}
 
-	public void setPosX(int posX) {
+	public void setPosX(double posX) {
 		this.posX = posX;
 	}
 
-	public int getPosY() {
+	public double getPosY() {
 		return posY;
 	}
 
-	public void setPosY(int posY) {
+	public void setPosY(double posY) {
 		this.posY = posY;
+	}
+
+	public Intersection getIntersection() {
+		return intersection;
+	}
+
+	public void setIntersection(Intersection intersection) {
+		this.intersection = intersection;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + posX;
-		result = prime * result + posY;
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((intersection == null) ? 0 : intersection.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(posX);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(posY);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -50,16 +85,29 @@ public class Vertex {
 		if (getClass() != obj.getClass())
 			return false;
 		Vertex other = (Vertex) obj;
-		if (posX != other.posX)
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
 			return false;
-		if (posY != other.posY)
+		if (intersection == null) {
+			if (other.intersection != null)
+				return false;
+		} else if (!intersection.equals(other.intersection))
+			return false;
+		if (Double.doubleToLongBits(posX) != Double.doubleToLongBits(other.posX))
+			return false;
+		if (Double.doubleToLongBits(posY) != Double.doubleToLongBits(other.posY))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Vertex [posX=" + posX + ", posY=" + posY + "]";
+		return "Vertex [posX=" + posX + ", posY=" + posY + ", intersection=" + intersection + ", description="
+				+ description + "]";
 	}
 
+	
+	
 }
