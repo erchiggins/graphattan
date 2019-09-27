@@ -1,4 +1,4 @@
-package proj.manhattan.model;
+package walk.graphattan.model;
 
 import java.util.Map;
 
