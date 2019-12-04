@@ -1,4 +1,4 @@
-package walk.graphattan.model;
+package walk.graphattan.graph;
 
 public class Edge {
 	
@@ -38,12 +38,6 @@ public class Edge {
 		this.type = type;
 	}
 
-	@Override
-	public String toString() {
-		return "Edge [weight=" + weight + ", type=" + type + ", source=" + source + ", destination=" + destination
-				+ "]";
-	}
-
 	public Vertex getSource() {
 		return source;
 	}
@@ -59,5 +53,12 @@ public class Edge {
 	public void setDestination(Vertex destination) {
 		this.destination = destination;
 	}
+	
+	@Override
+	public String toString() {
+		return "Edge [weight=" + weight + ", type=" + type + ", source=" + source + ", destination=" + destination
+				+ "]";
+	}
+
 
 }

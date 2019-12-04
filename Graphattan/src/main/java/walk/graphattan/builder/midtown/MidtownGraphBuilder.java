@@ -1,8 +1,8 @@
-package walk.graphattan.builder;
+package walk.graphattan.builder.midtown;
 
+import walk.graphattan.builder.GraphBuilder;
 import walk.graphattan.exception.InvalidLocationException;
-import walk.graphattan.model.CityGraph;
-import walk.graphattan.model.CornerDesc;
+import walk.graphattan.graph.CityGraph;
 
 /*
  * The MidtownGraphBuilder defines CityGraph construction for a uniform, rectangular grid

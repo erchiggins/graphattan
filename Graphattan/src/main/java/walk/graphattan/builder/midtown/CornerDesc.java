@@ -1,4 +1,4 @@
-package walk.graphattan.model;
+package walk.graphattan.builder.midtown;
 
 public enum CornerDesc {
 	

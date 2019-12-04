@@ -1,4 +1,4 @@
-package walk.graphattan.model;
+package walk.graphattan.graph;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -49,5 +49,7 @@ public class CityGraph {
 	public List<Edge> getAdjacent(Vertex vertex) {
 		return graph.get(vertex);
 	}
+	
+	// TODO: get vertices by intersection or position 
 
 }

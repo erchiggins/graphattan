@@ -1,4 +1,4 @@
-package walk.graphattan.model;
+package walk.graphattan.graph;
 
 import java.util.HashSet;
 import java.util.Set;

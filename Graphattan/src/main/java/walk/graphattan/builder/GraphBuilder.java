@@ -1,6 +1,6 @@
 package walk.graphattan.builder;
 
-import walk.graphattan.model.CityGraph;
+import walk.graphattan.graph.CityGraph;
 
 public interface GraphBuilder {
 	

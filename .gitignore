@@ -14,6 +14,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+Servers/
 
 # External tool builders
 .externalToolBuilders/
@@ -123,3 +124,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/java,windows,eclipse
+
+*/target/

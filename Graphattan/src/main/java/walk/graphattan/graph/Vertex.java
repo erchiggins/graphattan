@@ -1,4 +1,4 @@
-package walk.graphattan.model;
+package walk.graphattan.graph;
 
 /*
  * The Vertex is the basic building block of the CityGraph, representing a location 
