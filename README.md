@@ -8,7 +8,7 @@ about walking commutes in Manhattan. A shared dislike of waiting at intersection
 - What rules governed the decision made to turn one way or another at an intersection?
 - By observing many successive trips, could those rules be modified to consistently result in more optimal commutes?
 
-### CityGraph Construction
+### CityGraph
 - Basic CityGraph model is described [here](https://github.com/erchiggins/graphattan/wiki/CityGraph).
 - Construction of a simple, programmatically generated grid based on Midtown Manhattan is described [here](https://github.com/erchiggins/graphattan/wiki/MidtownGraphBuilder).
 
