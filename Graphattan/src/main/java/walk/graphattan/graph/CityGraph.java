@@ -50,6 +50,5 @@ public class CityGraph {
 		return graph.get(vertex);
 	}
 	
-	// TODO: get vertices by intersection or position 
-
+	// TODO: get vertices by position or intersection
 }
