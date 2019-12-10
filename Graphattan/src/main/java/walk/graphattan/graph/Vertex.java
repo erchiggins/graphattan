@@ -51,11 +51,12 @@ public class Vertex {
 		this.intersection = intersection;
 	}
 
+	// hashCode and equals are based on position values, for validation in CityGraph map
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((intersection == null) ? 0 : intersection.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(posX);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -73,11 +74,6 @@ public class Vertex {
 		if (getClass() != obj.getClass())
 			return false;
 		Vertex other = (Vertex) obj;
-		if (intersection == null) {
-			if (other.intersection != null)
-				return false;
-		} else if (!intersection.equals(other.intersection))
-			return false;
 		if (Double.doubleToLongBits(posX) != Double.doubleToLongBits(other.posX))
 			return false;
 		if (Double.doubleToLongBits(posY) != Double.doubleToLongBits(other.posY))

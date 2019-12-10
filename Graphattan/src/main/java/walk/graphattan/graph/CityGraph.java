@@ -24,18 +24,24 @@ public class CityGraph {
 
 	// returns true if Vertex was not already present and was added to the CityGraph
 	public boolean addVertex(Vertex vertex) {
-		if (graph.containsKey(vertex)) {
+		if (vertex == null || graph.containsKey(vertex)) {
 			return false;
 		} else {
 			graph.put(vertex, new ArrayList<Edge>());
 			return true;
 		}
 	}
-	
+
 	// returns true if both Vertices are already present in the CityGraph
 	public boolean addEdge(Edge edge) {
-		List<Edge> sourceEdges = graph.get(edge.getSource());
-		List<Edge> destinationEdges = graph.get(edge.getDestination());
+		if (edge == null || edge.getWeight() < 0)
+			return false;
+		Vertex source = edge.getSource();
+		Vertex destination = edge.getDestination();
+		if (source == null || destination == null)
+			return false;
+		List<Edge> sourceEdges = graph.get(source);
+		List<Edge> destinationEdges = graph.get(destination);
 		if (sourceEdges != null && destinationEdges != null) {
 			sourceEdges.add(edge);
 			// flip edge and source to complete undirected Edge addition
@@ -45,10 +51,4 @@ public class CityGraph {
 			return false;
 		}
 	}
-
-	public List<Edge> getAdjacent(Vertex vertex) {
-		return graph.get(vertex);
-	}
-	
-	// TODO: get vertices by position or intersection
 }
