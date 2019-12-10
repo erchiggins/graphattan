@@ -2,8 +2,8 @@ package walk.graphattan.builder;
 
 import walk.graphattan.graph.CityGraph;
 
-public interface GraphBuilder {
+public abstract class GraphBuilder {
 	
-	public CityGraph build();
+	public abstract CityGraph build();
 
 }
