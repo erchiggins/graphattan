@@ -1,7 +1,16 @@
 package walk.graphattan.graph;
 
+/*
+ * An Edge connects two Vertices, its "source" and "destination."
+ * As the CityGraph is undirected, every Edge has a counterpart with its "source" and 
+ * "destination" flipped so that the traversal may occur in either direction.
+ * The weight of the Edge denotes its length in feet, which is not necessarily the 
+ * same as the difference in (x,y) positions of the source and destination Vertices.
+ * The Edge may either be a CROSSING or a SIDEWALK, which has consequences for its 
+ * availability as a path during a traversal of the map.
+ */
 public class Edge {
-	
+
 	public Edge(double weight, EdgeType type, Vertex source, Vertex destination) {
 		super();
 		this.weight = weight;
@@ -14,7 +23,7 @@ public class Edge {
 		super();
 	}
 
-	// length of crossing or walkway in feet 
+	// length of crossing or walkway in feet
 	private double weight;
 	// whether edge represents a crossing or walkway
 	private EdgeType type;
@@ -53,7 +62,7 @@ public class Edge {
 	public void setDestination(Vertex destination) {
 		this.destination = destination;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Edge [weight=" + weight + ", type=" + type + ", source=" + source + ", destination=" + destination
@@ -98,6 +107,5 @@ public class Edge {
 			return false;
 		return true;
 	}
-
 
 }
