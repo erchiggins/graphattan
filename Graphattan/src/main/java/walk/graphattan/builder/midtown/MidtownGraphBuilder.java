@@ -132,14 +132,56 @@ public class MidtownGraphBuilder extends GraphBuilder {
 		return i_init;
 	}
 
+	// represents the farthest offset to the West which any Vertex has relative to the starting location
 	private double calculateXInit() {
-		// TODO
-		return 0.0;
+		double x_pos = 0.0;
+		if (c_i_start == CornerDesc.SW || c_i_start == CornerDesc.NW) {
+			// starting location is on West side of graph, like initial vertex
+			// now check location of start within its intersection
+			if (start_corner == CornerDesc.SW || start_corner == CornerDesc.NW) {
+				// initial vertex is at same x-value as starting location
+				x_pos = 0.0;
+			} else {
+				// initial vertex is offset by one avenue crossing width
+				x_pos = -c_ave;
+			}
+		} else {
+			// starting location is on East side of graph, opposite initial vertex
+			//check location of start within its intersection
+			if (start_corner == CornerDesc.SW || start_corner == CornerDesc.NW) {
+				x_pos = -(c_ave+w_ave)*Math.abs(start_ave-finish_ave);
+			} else {
+				// initial vertex is offset as far as possible
+				x_pos = -((c_ave+w_ave)*Math.abs(start_ave-finish_ave)+c_ave);
+			}
+		}
+		return x_pos;
 	}
 
+	// represents the farthest offset to the South which any Vertex has relative to the starting location
 	private double calculateYInit() {
-		// TODO
-		return 0.0;
+		double y_pos = 0.0;
+		if (c_i_start == CornerDesc.SW || c_i_start == CornerDesc.SE) {
+			// starting location is on South side of graph, like initial vertex
+			// now check location of start within its intersection
+			if (start_corner == CornerDesc.SW || start_corner == CornerDesc.SE) {
+				// initial vertex is at same y-value as starting location
+				y_pos = 0.0;
+			} else {
+				// initial vertex is offset by one street crossing width
+				y_pos = -c_st;
+			}
+		} else {
+			// starting location is on North side of graph, opposite initial vertex
+			//check location of start within its intersection
+			if (start_corner == CornerDesc.SW || start_corner == CornerDesc.SE) {
+				y_pos = -(c_st+w_st)*Math.abs(start_st-finish_st);
+			} else {
+				// initial vertex is offset as far as possible
+				y_pos = -((c_st+w_st)*Math.abs(start_st-finish_st)+c_st);
+			}
+		}
+		return y_pos;
 	}
 
 	@Override
@@ -179,7 +221,6 @@ public class MidtownGraphBuilder extends GraphBuilder {
 	// northSouth indicates whether this horizontal is the North or South side of a
 	// Street (true=North, false=South)
 	private Vertex[] addHorizontal(Vertex[] old_horizontal, boolean north) {
-
 		// Array of new Vertices to be returned
 		Vertex[] new_horizontal = new Vertex[this.e_w_vertices];
 		// next Vertex to be added
@@ -187,7 +228,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 
 		// check if old_horizontal is null, indicates first horizontal
 		if (old_horizontal != null) {
-
+			// TODO
 			// add vertex directly to the north of old_horizontal[0]
 			// determine location and intersection of v_next
 			// add v_next to cityGraph
@@ -206,6 +247,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 			// add edge between old_horizontal[i] and new_horizontal[i]
 
 		} else {
+			// TODO
 			// create starting vertex (SW corner of i_init)
 			Vertex v_init = new Vertex(calculateXInit(), calculateYInit(), i_init);
 		}
