@@ -1,11 +1,10 @@
 package walk.graphattan.builder.midtown;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import walk.graphattan.builder.GraphBuilder;
 import walk.graphattan.exception.InvalidLocationException;
 import walk.graphattan.graph.CityGraph;
+import walk.graphattan.graph.Edge;
+import walk.graphattan.graph.EdgeType;
 import walk.graphattan.graph.Intersection;
 import walk.graphattan.graph.Vertex;
 
@@ -17,7 +16,7 @@ import walk.graphattan.graph.Vertex;
  * There is no maximum value on street or avenue numbers. 
  * Intersections have four Vertices, at their NE, NW, SE, and SW corners. 
  * Note that "start" and "finish" are used in reference to desired traversal pattern, not 
- * the order of construction.
+ * the order of construction. "Initial" is used in reference to construction order.
  */
 public class MidtownGraphBuilder extends GraphBuilder {
 
@@ -59,6 +58,14 @@ public class MidtownGraphBuilder extends GraphBuilder {
 
 	// Intersection at SW corner of map, used to begin construction
 	private Intersection i_init;
+	// street and avenue numbers of i_init
+	private int st_init;
+	private int ave_init;
+	// most recently constructed street
+	private int st_current;
+	// x,y coordinates of first vertex to be constructed
+	private double x_init;
+	private double y_init;
 
 	// number of Vertices in horizontal (E-W) direction
 	private int e_w_vertices;
@@ -66,13 +73,17 @@ public class MidtownGraphBuilder extends GraphBuilder {
 	private int n_s_vertices;
 
 	// graph representing city streets between starting point and finishing point
-	private CityGraph cityGraph;
+	private CityGraph cityGraph = new CityGraph();
 
 	public void setStart(int start_st, int start_ave, CornerDesc start_corner) throws InvalidLocationException {
 		if (start_st > 0 && start_ave > 0 && start_corner != null) {
 			this.start_st = start_st;
 			this.start_ave = start_ave;
 			this.start_corner = start_corner;
+			i_start = new Intersection();
+			i_start.setDescription(start_ave + " Ave and " + start_st + " St");
+			i_start.addRoute(start_ave + " Ave");
+			i_start.addRoute(start_st + " St");
 		} else {
 			throw new InvalidLocationException("invalid starting point");
 		}
@@ -83,6 +94,10 @@ public class MidtownGraphBuilder extends GraphBuilder {
 			this.finish_st = finish_st;
 			this.finish_ave = finish_ave;
 			this.finish_corner = finish_corner;
+			i_finish = new Intersection();
+			i_finish.setDescription(finish_ave + " Ave and " + finish_st + " St");
+			i_finish.addRoute(finish_ave + " Ave");
+			i_finish.addRoute(finish_st + " St");
 		} else {
 			throw new InvalidLocationException("invalid finishing point");
 		}
@@ -98,42 +113,61 @@ public class MidtownGraphBuilder extends GraphBuilder {
 		return this.n_s_vertices;
 	}
 
-	private Intersection findSWIntersection() {
-		Intersection i_init = null;
+	// return Intersection from which construction will begin, and set where on the
+	// CityGraph
+	// the Intersection of the starting location for the traversal (c_i_start) is
+	// located (NE, NW, SE, SW)
+	// construction will always begin with the SW intersection
+	// also sets other initial construction values for street, avenue, and xy coords
+	public Intersection findSWIntersection() {
 		if (start_st <= finish_st) {
 			// start_st is South of finish_st (i_init is on start_st)
 			if (start_ave >= finish_ave) {
-				// i_start is SW corner
+				// i_start is SW intersection
 				i_init = i_start;
+				st_init = start_st;
+				ave_init = start_ave;
 				c_i_start = CornerDesc.SW;
 			} else {
-				// i_start is SE corner
+				// i_start is SE intersection
 				i_init = new Intersection();
 				i_init.setDescription(finish_ave + " Ave and " + start_st + " St");
 				i_init.addRoute(finish_ave + " Ave");
 				i_init.addRoute(start_st + " St");
+				st_init = start_st;
+				ave_init = finish_ave;
 				c_i_start = CornerDesc.SE;
 			}
 		} else {
 			// start_st is North of finish_st (i_init is on finish_st)
 			if (start_ave >= finish_ave) {
-				// i_finish is SE Corner
+				// i_finish is SE intersection
 				i_init = new Intersection();
 				i_init.setDescription(start_ave + " Ave and " + finish_st + " St");
 				i_init.addRoute(start_ave + " Ave");
 				i_init.addRoute(finish_st + " St");
+				st_init = finish_st;
+				ave_init = start_ave;
 				c_i_start = CornerDesc.NW;
 			} else {
-				// i_finish is SW corner
+				// i_finish is SW intersection
 				i_init = i_finish;
+				st_init = finish_st;
+				ave_init = finish_ave;
 				c_i_start = CornerDesc.NE;
 			}
+
 		}
+		// setup for graph construction
+		st_current = st_init;
+		x_init = calculateXInit();
+		y_init = calculateYInit();
 		return i_init;
 	}
 
-	// represents the farthest offset to the West which any Vertex has relative to the starting location
-	private double calculateXInit() {
+	// represents the farthest offset to the West which any Vertex has relative to
+	// the starting location
+	public double calculateXInit() {
 		double x_pos = 0.0;
 		if (c_i_start == CornerDesc.SW || c_i_start == CornerDesc.NW) {
 			// starting location is on West side of graph, like initial vertex
@@ -147,19 +181,20 @@ public class MidtownGraphBuilder extends GraphBuilder {
 			}
 		} else {
 			// starting location is on East side of graph, opposite initial vertex
-			//check location of start within its intersection
+			// check location of start within its intersection
 			if (start_corner == CornerDesc.SW || start_corner == CornerDesc.NW) {
-				x_pos = -(c_ave+w_ave)*Math.abs(start_ave-finish_ave);
+				x_pos = -(c_ave + w_ave) * Math.abs(start_ave - finish_ave);
 			} else {
 				// initial vertex is offset as far as possible
-				x_pos = -((c_ave+w_ave)*Math.abs(start_ave-finish_ave)+c_ave);
+				x_pos = -((c_ave + w_ave) * Math.abs(start_ave - finish_ave) + c_ave);
 			}
 		}
 		return x_pos;
 	}
 
-	// represents the farthest offset to the South which any Vertex has relative to the starting location
-	private double calculateYInit() {
+	// represents the farthest offset to the South which any Vertex has relative to
+	// the starting location
+	public double calculateYInit() {
 		double y_pos = 0.0;
 		if (c_i_start == CornerDesc.SW || c_i_start == CornerDesc.SE) {
 			// starting location is on South side of graph, like initial vertex
@@ -173,12 +208,12 @@ public class MidtownGraphBuilder extends GraphBuilder {
 			}
 		} else {
 			// starting location is on North side of graph, opposite initial vertex
-			//check location of start within its intersection
+			// check location of start within its intersection
 			if (start_corner == CornerDesc.SW || start_corner == CornerDesc.SE) {
-				y_pos = -(c_st+w_st)*Math.abs(start_st-finish_st);
+				y_pos = -(c_st + w_st) * Math.abs(start_st - finish_st);
 			} else {
 				// initial vertex is offset as far as possible
-				y_pos = -((c_st+w_st)*Math.abs(start_st-finish_st)+c_st);
+				y_pos = -((c_st + w_st) * Math.abs(start_st - finish_st) + c_st);
 			}
 		}
 		return y_pos;
@@ -186,16 +221,6 @@ public class MidtownGraphBuilder extends GraphBuilder {
 
 	@Override
 	public CityGraph build() {
-		this.cityGraph = new CityGraph();
-		// create i_start, i_finish
-		i_start = new Intersection();
-		i_start.setDescription(start_ave + " Ave and " + start_st + " St");
-		i_start.addRoute(start_ave + " Ave");
-		i_start.addRoute(start_st + " St");
-		i_finish = new Intersection();
-		i_finish.setDescription(finish_ave + " Ave and " + finish_st + " St");
-		i_finish.addRoute(finish_ave + " Ave");
-		i_finish.addRoute(finish_st + " St");
 		// calculate number of vertices from S-N (including full Intersections, not just
 		// start/finish corners)
 		calculateNorthSouthVertices();
@@ -210,7 +235,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 		boolean isNorth = false;
 		Vertex[] latest = addHorizontal(null, isNorth);
 		// horizontals 1-n_s_vertices-1
-		for (int i=1; i<n_s_vertices-1; i++) {
+		for (int i = 1; i < n_s_vertices - 1; i++) {
 			isNorth = !isNorth;
 			latest = addHorizontal(latest, isNorth);
 		}
@@ -220,38 +245,105 @@ public class MidtownGraphBuilder extends GraphBuilder {
 	// starting from the NW vertex of current cityGraph
 	// northSouth indicates whether this horizontal is the North or South side of a
 	// Street (true=North, false=South)
-	private Vertex[] addHorizontal(Vertex[] old_horizontal, boolean north) {
+	public Vertex[] addHorizontal(Vertex[] old_horizontal, boolean north) {
+		// old_horizontal==null should always occur with north==false, otherwise GTFO
+		if (old_horizontal == null && north)
+			return null;
 		// Array of new Vertices to be returned
 		Vertex[] new_horizontal = new Vertex[this.e_w_vertices];
-		// next Vertex to be added
-		Vertex v_next = new Vertex();
+		for (int i = 0; i < this.e_w_vertices; i++) {
+			Vertex v_next = new Vertex();
+			// determine x position
+			if (i == 0) {
+				v_next.setPosX(x_init);
+			} else {
+				double x_offset = (i % 2 == 0) ? w_ave : c_ave;
+				v_next.setPosX(new_horizontal[i-1].getPosX() + x_offset);
+			}
+			// determine y position
+			if (old_horizontal != null) {
+				if (north) {
+					// across a street from the last horizontal
+					v_next.setPosY(old_horizontal[i].getPosY() + c_st);
+				} else {
+					// a block north from the last horizontal
+					v_next.setPosY(old_horizontal[i].getPosY() + w_st);
+				}
+			} else {
+				v_next.setPosY(y_init);
+			}
+			// determine intersection
+			if (i % 2 == 0) {
+				// western side of an avenue
+				if (north) {
+					// in same intersection as old_horizontal vertex in same position
+					// begin first horizontal on south side, so safe from NullPointerExceptions
+					v_next.setIntersection(old_horizontal[i].getIntersection());
+				} else {
+					// create new intersection
+					if (i == 0 && st_current == st_init) {
+						// case of very first vertex to be added
+						v_next.setIntersection(i_init);
+					} else {
+						Intersection i_next = new Intersection();
+						int ave_next = ave_init - (int) Math.floor(i / 2);
+						i_next.setDescription(ave_next + " Ave and " + st_current + " St");
+						i_next.addRoute(ave_next + " Ave");
+						i_next.addRoute(st_current + " St");
+						v_next.setIntersection(i_next);
+					}
+				}
+			} else {
+				// eastern side of an avenue, will have "passed through" construction of
+				// intersection already regardless of whether north or south side of street
+				v_next.setIntersection(new_horizontal[i - 1].getIntersection());
+			}
+			// add to CityGraph
+			cityGraph.addVertex(v_next);
+			// add to new_horizontal
+			new_horizontal[i] = v_next;
 
-		// check if old_horizontal is null, indicates first horizontal
-		if (old_horizontal != null) {
-			// TODO
-			// add vertex directly to the north of old_horizontal[0]
-			// determine location and intersection of v_next
-			// add v_next to cityGraph
-			// set v_next as new_horizontal[0]
-			new_horizontal[0] = v_next;
-			// add edge between old_horizontal[0] and new_horizontal[0]
-
-			// iteratively add new Vertices to the farthest Eastern extent of this
-			// horizontal
-			// for each
-			// assign v_next to new Vertex
-			// determine location and intersection of v_next
-			// add v_next to cityGraph
-			// add v_next to new_horizontal[i]
+			// if not at border of graph..
 			// add edge between new_horizontal[i-1] and new_horizontal[i]
+			if (i != 0) {
+				Edge e_east_west = new Edge();
+				e_east_west.setSource(new_horizontal[i - 1]);
+				e_east_west.setDestination(new_horizontal[i]);
+				if (i % 2 != 0) {
+					// e_east_west is an avenue crossing
+					e_east_west.setType(EdgeType.CROSSING);
+					e_east_west.setWeight(c_ave);
+				} else {
+					// e_east_west is a sidewalk between avenues
+					e_east_west.setType(EdgeType.SIDEWALK);
+					e_east_west.setWeight(w_ave);
+				}
+				cityGraph.addEdge(e_east_west);
+			}
+			// if old_horizontal is not null..
 			// add edge between old_horizontal[i] and new_horizontal[i]
+			if (old_horizontal != null) {
+				Edge e_north_south = new Edge();
+				e_north_south.setSource(old_horizontal[i]);
+				e_north_south.setDestination(new_horizontal[i]);
+				if (north) {
+					// e_north_south is a street crossing
+					e_north_south.setType(EdgeType.CROSSING);
+					e_north_south.setWeight(c_st);
+				} else {
+					// e_north_south is a sidewalk between streets
+					e_north_south.setType(EdgeType.SIDEWALK);
+					e_north_south.setWeight(w_st);
+				}
+				cityGraph.addEdge(e_north_south);
+			}
 
-		} else {
-			// TODO
-			// create starting vertex (SW corner of i_init)
-			Vertex v_init = new Vertex(calculateXInit(), calculateYInit(), i_init);
+			// update st_current ONLY IF north
+			if (north) {
+				// we're done with this street, next horizontal will be one higher
+				st_current++;
+			}
 		}
-
 		return new_horizontal;
 	}
 

@@ -1,8 +1,13 @@
 package walk.graphattan;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 import walk.graphattan.builder.midtown.CornerDesc;
 import walk.graphattan.builder.midtown.MidtownGraphBuilder;
 import walk.graphattan.exception.InvalidLocationException;
+import walk.graphattan.graph.CityGraph;
+import walk.graphattan.graph.Vertex;
 
 public class Commute {
 
@@ -11,15 +16,16 @@ public class Commute {
 		// Ave and 49th St, NE corner to 3rd Ave and 53rd St, SE corner
 		MidtownGraphBuilder mgb = new MidtownGraphBuilder();
 		try {
-			mgb.setStart(46, 1, CornerDesc.NE);
+			mgb.setStart(51, 1, CornerDesc.NE);
 			mgb.setFinish(53, 3, CornerDesc.SE);
 		} catch (InvalidLocationException e) {
 			e.printStackTrace();
 		}
-		// build()
-		// TODO
-		// print finished graph to console
-		// TODO
+		CityGraph cityGraph = mgb.build();
+		Iterator it = cityGraph.getGraph().entrySet().iterator();
+		while(it.hasNext()) {
+			System.out.println(it.next());
+		}
 	}
 
 }
