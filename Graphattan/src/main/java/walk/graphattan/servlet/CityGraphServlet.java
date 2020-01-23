@@ -8,13 +8,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import walk.graphattan.builder.midtown.CornerDesc;
 import walk.graphattan.builder.midtown.MidtownGraphBuilder;
+import walk.graphattan.graph.CityGraph;
 
 @WebServlet("/graph")
 public class CityGraphServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1998267727045956279L;
+	
+	private ObjectMapper om = new ObjectMapper();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,8 +43,11 @@ public class CityGraphServlet extends HttpServlet {
 		
 		if (valid_input) {
 			// build graph
+			CityGraph graph = builder.build();
 			// convert graph to JSON
+			String graphJSON = om.writeValueAsString(graph);
 			// package into response and send
+			resp.getWriter().write(graphJSON);
 		} else {
 			resp.sendError(400, "Invalid input");
 		}

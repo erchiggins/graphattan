@@ -85,7 +85,5 @@ public class Vertex {
 	public String toString() {
 		return "Vertex [posX=" + posX + ", posY=" + posY + ", intersection=" + intersection + "]";
 	}
-
-	
 	
 }

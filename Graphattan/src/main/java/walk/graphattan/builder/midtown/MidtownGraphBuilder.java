@@ -258,7 +258,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 				v_next.setPosX(x_init);
 			} else {
 				double x_offset = (i % 2 == 0) ? w_ave : c_ave;
-				v_next.setPosX(new_horizontal[i-1].getPosX() + x_offset);
+				v_next.setPosX(new_horizontal[i - 1].getPosX() + x_offset);
 			}
 			// determine y position
 			if (old_horizontal != null) {
@@ -337,12 +337,11 @@ public class MidtownGraphBuilder extends GraphBuilder {
 				}
 				cityGraph.addEdge(e_north_south);
 			}
-
-			// update st_current ONLY IF north
-			if (north) {
-				// we're done with this street, next horizontal will be one higher
-				st_current++;
-			}
+		}
+		// update st_current ONLY IF north
+		if (north) {
+			// we're done with this street, next horizontal will be one higher
+			st_current++;
 		}
 		return new_horizontal;
 	}
