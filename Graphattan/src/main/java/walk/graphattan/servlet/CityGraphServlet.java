@@ -45,6 +45,7 @@ public class CityGraphServlet extends HttpServlet {
 			// build graph
 			CityGraph graph = builder.build();
 			// convert graph to JSON
+			// TODO: replace this with a SimpleCityGraphDTO with the CityGraphConverter
 			String graphJSON = om.writeValueAsString(graph);
 			// package into response and send
 			resp.getWriter().write(graphJSON);
