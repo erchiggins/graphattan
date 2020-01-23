@@ -12,7 +12,7 @@ import walk.graphattan.builder.midtown.CornerDesc;
 import walk.graphattan.builder.midtown.MidtownGraphBuilder;
 
 @WebServlet("/graph")
-public class GraphBuilderServlet extends HttpServlet {
+public class CityGraphServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1998267727045956279L;
 
