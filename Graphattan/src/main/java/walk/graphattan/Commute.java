@@ -1,13 +1,11 @@
 package walk.graphattan;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import walk.graphattan.builder.midtown.CornerDesc;
 import walk.graphattan.builder.midtown.MidtownGraphBuilder;
 import walk.graphattan.exception.InvalidLocationException;
 import walk.graphattan.graph.CityGraph;
-import walk.graphattan.graph.Vertex;
 
 public class Commute {
 

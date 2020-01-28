@@ -6,12 +6,11 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import walk.graphattan.exception.InvalidLocationException;
+import walk.graphattan.graph.CityGraph;
 import walk.graphattan.graph.Vertex;
 
 class MidtownGraphBuilderTest {
@@ -226,4 +225,5 @@ class MidtownGraphBuilderTest {
 		Vertex[] secondHorizontal = mgb.addHorizontal(firstHorizontal, true);
 		assertEquals(4, secondHorizontal.length);
 	}
+
 }

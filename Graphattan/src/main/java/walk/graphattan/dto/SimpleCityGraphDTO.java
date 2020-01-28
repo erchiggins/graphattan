@@ -4,31 +4,33 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import walk.graphattan.graph.Vertex;
+
 public class SimpleCityGraphDTO {
 	
 	public SimpleCityGraphDTO() {
 		super();
 	}
 	private Map<SimpleVertexDTO, List<SimpleEdgeDTO>> graph = new Hashtable<>();
-	private int start_id; // id of starting vertex
-	private int finish_id; // id of finishing vertex
+	private Vertex start; // starting vertex
+	private Vertex finish; // finishing vertex
 	public Map<SimpleVertexDTO, List<SimpleEdgeDTO>> getGraph() {
 		return graph;
 	}
 	public void setGraph(Map<SimpleVertexDTO, List<SimpleEdgeDTO>> graph) {
 		this.graph = graph;
 	}
-	public int getStart_id() {
-		return start_id;
+	public Vertex getStart() {
+		return start;
 	}
-	public void setStart_id(int start_id) {
-		this.start_id = start_id;
+	public void setStar(Vertex start) {
+		this.start = start;
 	}
-	public int getFinish_id() {
-		return finish_id;
+	public Vertex getFinish() {
+		return finish;
 	}
-	public void setFinish_id(int finish_id) {
-		this.finish_id = finish_id;
+	public void setFinish(Vertex finish) {
+		this.finish = finish;
 	}
 
 }

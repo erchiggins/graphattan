@@ -63,6 +63,8 @@ public class MidtownGraphBuilder extends GraphBuilder {
 	private int ave_init;
 	// most recently constructed street
 	private int st_current;
+	// most recently constructed avenue
+	private int ave_current;
 	// x,y coordinates of first vertex to be constructed
 	private double x_init;
 	private double y_init;
@@ -160,6 +162,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 		}
 		// setup for graph construction
 		st_current = st_init;
+		ave_current = ave_init;
 		x_init = calculateXInit();
 		y_init = calculateYInit();
 		return i_init;
@@ -253,6 +256,8 @@ public class MidtownGraphBuilder extends GraphBuilder {
 		Vertex[] new_horizontal = new Vertex[this.e_w_vertices];
 		for (int i = 0; i < this.e_w_vertices; i++) {
 			Vertex v_next = new Vertex();
+			// what type of corner is v_next?
+			CornerDesc corner = null;
 			// determine x position
 			if (i == 0) {
 				v_next.setPosX(x_init);
@@ -279,6 +284,8 @@ public class MidtownGraphBuilder extends GraphBuilder {
 					// in same intersection as old_horizontal vertex in same position
 					// begin first horizontal on south side, so safe from NullPointerExceptions
 					v_next.setIntersection(old_horizontal[i].getIntersection());
+					// v_next is NW corner of intersection
+					corner = CornerDesc.NW;
 				} else {
 					// create new intersection
 					if (i == 0 && st_current == st_init) {
@@ -286,20 +293,35 @@ public class MidtownGraphBuilder extends GraphBuilder {
 						v_next.setIntersection(i_init);
 					} else {
 						Intersection i_next = new Intersection();
-						int ave_next = ave_init - (int) Math.floor(i / 2);
-						i_next.setDescription(ave_next + " Ave and " + st_current + " St");
-						i_next.addRoute(ave_next + " Ave");
+						ave_current = ave_init - (int) Math.floor(i / 2);
+						i_next.setDescription(ave_current + " Ave and " + st_current + " St");
+						i_next.addRoute(ave_current + " Ave");
 						i_next.addRoute(st_current + " St");
 						v_next.setIntersection(i_next);
 					}
+					// v_next is SW corner of intersection
+					corner = CornerDesc.SW;
 				}
 			} else {
 				// eastern side of an avenue, will have "passed through" construction of
 				// intersection already regardless of whether north or south side of street
 				v_next.setIntersection(new_horizontal[i - 1].getIntersection());
+				if (north) {
+					// v_next is NE corner of intersection
+					corner = CornerDesc.NE;
+				} else {
+					// v_next is SE corner of intersection
+					corner = CornerDesc.SE;
+				}
 			}
 			// add to CityGraph
 			cityGraph.addVertex(v_next);
+			// check whether v_next is a starting or finishing vertex
+			if (st_current == start_st && ave_current == start_ave && corner.equals(start_corner)) {
+				cityGraph.setStart(v_next);
+			} else if (st_current == finish_st && ave_current == finish_ave && corner.equals(finish_corner)) {
+				cityGraph.setFinish(v_next);
+			}
 			// add to new_horizontal
 			new_horizontal[i] = v_next;
 

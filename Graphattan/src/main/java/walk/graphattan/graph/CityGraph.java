@@ -17,6 +17,12 @@ public class CityGraph {
 
 	// Hashtable is chosen to prevent insertion of null keys
 	private Map<Vertex, List<Edge>> graph = new Hashtable<Vertex, List<Edge>>();
+	
+	// Traversal's starting point
+	private Vertex start;
+	
+	// Traversal's finishing point
+	private Vertex finish;
 
 	public Map<Vertex, List<Edge>> getGraph() {
 		return graph;
@@ -50,5 +56,21 @@ public class CityGraph {
 		} else {
 			return false;
 		}
+	}
+
+	public Vertex getStart() {
+		return start;
+	}
+
+	public void setStart(Vertex start) {
+		this.start = start;
+	}
+
+	public Vertex getFinish() {
+		return finish;
+	}
+
+	public void setFinish(Vertex finish) {
+		this.finish = finish;
 	}
 }

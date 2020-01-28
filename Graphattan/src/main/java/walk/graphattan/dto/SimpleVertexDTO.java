@@ -30,6 +30,7 @@ public class SimpleVertexDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + id;
 		long temp;
 		temp = Double.doubleToLongBits(posX);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -46,11 +47,14 @@ public class SimpleVertexDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		SimpleVertexDTO other = (SimpleVertexDTO) obj;
+		if (id != other.id)
+			return false;
 		if (Double.doubleToLongBits(posX) != Double.doubleToLongBits(other.posX))
 			return false;
 		if (Double.doubleToLongBits(posY) != Double.doubleToLongBits(other.posY))
 			return false;
 		return true;
 	}
+	
 
 }
