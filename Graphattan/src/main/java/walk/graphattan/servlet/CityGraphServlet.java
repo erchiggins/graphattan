@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import walk.graphattan.builder.midtown.CornerDesc;
 import walk.graphattan.builder.midtown.MidtownGraphBuilder;
+import walk.graphattan.converter.CityGraphConverter;
+import walk.graphattan.dto.SimpleCityGraphDTO;
 import walk.graphattan.graph.CityGraph;
 
 @WebServlet("/graph")
@@ -43,10 +45,10 @@ public class CityGraphServlet extends HttpServlet {
 		
 		if (valid_input) {
 			// build graph
-			CityGraph graph = builder.build();
+			CityGraph cityGraph = builder.build();
+			SimpleCityGraphDTO simpleCityGraph = CityGraphConverter.convertCityGraphToSimpleDTO(cityGraph);
 			// convert graph to JSON
-			// TODO: replace this with a SimpleCityGraphDTO with the CityGraphConverter
-			String graphJSON = om.writeValueAsString(graph);
+			String graphJSON = CityGraphConverter.getJSON(simpleCityGraph);
 			// package into response and send
 			resp.getWriter().write(graphJSON);
 		} else {

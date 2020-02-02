@@ -10,8 +10,7 @@ public class SimpleEdgeDTO {
 
 	private double weight;
 	private EdgeType type;
-	private int source; // id of source SimpleVertexDTO
-	private int destination; // id of destination SimpleVertexDTO
+	private SimpleVertexDTO destination;
 
 	public double getWeight() {
 		return weight;
@@ -29,19 +28,11 @@ public class SimpleEdgeDTO {
 		this.type = type;
 	}
 
-	public int getSource() {
-		return source;
-	}
-
-	public void setSource(int source) {
-		this.source = source;
-	}
-
-	public int getDestination() {
+	public SimpleVertexDTO getDestination() {
 		return destination;
 	}
 
-	public void setDestination(int destination) {
+	public void setDestination(SimpleVertexDTO destination) {
 		this.destination = destination;
 	}
 
@@ -49,8 +40,7 @@ public class SimpleEdgeDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + destination;
-		result = prime * result + source;
+		result = prime * result + ((destination == null) ? 0 : destination.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(weight);
@@ -67,9 +57,10 @@ public class SimpleEdgeDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		SimpleEdgeDTO other = (SimpleEdgeDTO) obj;
-		if (destination != other.destination)
-			return false;
-		if (source != other.source)
+		if (destination == null) {
+			if (other.destination != null)
+				return false;
+		} else if (!destination.equals(other.destination))
 			return false;
 		if (type != other.type)
 			return false;
