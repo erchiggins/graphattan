@@ -1,16 +1,15 @@
 package walk.graphattan.builder.midtown;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import walk.graphattan.exception.InvalidLocationException;
-import walk.graphattan.graph.CityGraph;
 import walk.graphattan.graph.Vertex;
 
 class MidtownGraphBuilderTest {
