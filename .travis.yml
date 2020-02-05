@@ -1,6 +1,8 @@
 language: java
 deploy:
   provider: elasticbeanstalk
+  skip_cleanup: true
+  zip_file: 'target/graphattan-0.0.1-SNAPSHOT.war'
   access_key_id: $ACCESS_KEY_ID
   secret_access_key: $SECRET_ACCESS_KEY
   region: us-west-1
