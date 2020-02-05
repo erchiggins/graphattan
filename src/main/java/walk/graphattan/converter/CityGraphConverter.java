@@ -75,7 +75,8 @@ public class CityGraphConverter {
 			else
 				result += "]}";
 		}
-		result += "]}";
+		result += "],\"start\":"+om.writeValueAsString(simpleCityGraph.getStart())+
+				",\"finish\":"+om.writeValueAsString(simpleCityGraph.getFinish())+"}";
 		return result;
 	}
 
