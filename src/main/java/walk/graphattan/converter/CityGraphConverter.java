@@ -16,15 +16,15 @@ import walk.graphattan.graph.Edge;
 import walk.graphattan.graph.Vertex;
 
 public class CityGraphConverter {
-	
+
 	private static ObjectMapper om = new ObjectMapper();
-	
+
 	/*
 	 * NOTE that this assumes a valid cityGraph object has been provided
 	 */
 	public static SimpleCityGraphDTO convertCityGraphToSimpleDTO(CityGraph cityGraph) {
 		SimpleCityGraphDTO simpleCityGraph = new SimpleCityGraphDTO();
-		Set<Vertex> vertices = ((Hashtable)cityGraph.getGraph()).keySet();
+		Set<Vertex> vertices = ((Hashtable) cityGraph.getGraph()).keySet();
 		for (Vertex v : vertices) {
 			SimpleVertexDTO sv = conVertex(v);
 			List<SimpleEdgeDTO> se = new ArrayList<>();
@@ -44,7 +44,7 @@ public class CityGraphConverter {
 		svd.setPosY(vertex.getPosY());
 		return svd;
 	}
-	
+
 	private static SimpleEdgeDTO conEdge(Edge edge) {
 		SimpleEdgeDTO sed = new SimpleEdgeDTO();
 		sed.setType(edge.getType());
@@ -52,19 +52,28 @@ public class CityGraphConverter {
 		sed.setDestination(conVertex(edge.getDestination()));
 		return sed;
 	}
-	
+
 	public static String getJSON(SimpleCityGraphDTO simpleCityGraph) throws JsonProcessingException {
 		String result = "{\"graph\":[";
+		int numVertices = simpleCityGraph.getGraph().size();
+		int v = 0;
 		for (SimpleVertexDTO svd : simpleCityGraph.getGraph().keySet()) {
 			// add vertex
-			result += om.writeValueAsString(svd);
-			result += ":[";
+			result += "{\"vertex\":" + om.writeValueAsString(svd) + ", \"edges\":[";
+			int numEdges = simpleCityGraph.getGraph().get(svd).size();
+			int e = 0;
 			// add edge list
 			for (SimpleEdgeDTO sed : simpleCityGraph.getGraph().get(svd)) {
 				result += om.writeValueAsString(sed);
-				result += ",";
+				e++;
+				if (e < numEdges)
+					result += ",";
 			}
-			result += "],";
+			v++;
+			if (v < numVertices)
+				result += "]},";
+			else
+				result += "]}";
 		}
 		result += "]}";
 		return result;
