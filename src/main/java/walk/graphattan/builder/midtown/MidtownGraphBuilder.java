@@ -238,7 +238,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 		boolean isNorth = false;
 		Vertex[] latest = addHorizontal(null, isNorth);
 		// horizontals 1-n_s_vertices-1
-		for (int i = 1; i < n_s_vertices - 1; i++) {
+		for (int i = 1; i < n_s_vertices; i++) {
 			isNorth = !isNorth;
 			latest = addHorizontal(latest, isNorth);
 		}
@@ -279,7 +279,8 @@ public class MidtownGraphBuilder extends GraphBuilder {
 			}
 			// determine intersection
 			if (i % 2 == 0) {
-				// western side of an avenue
+				// western side of an avenue, need to update ave_current
+				ave_current = ave_init - i/2;
 				if (north) {
 					// in same intersection as old_horizontal vertex in same position
 					// begin first horizontal on south side, so safe from NullPointerExceptions
@@ -293,7 +294,6 @@ public class MidtownGraphBuilder extends GraphBuilder {
 						v_next.setIntersection(i_init);
 					} else {
 						Intersection i_next = new Intersection();
-						ave_current = ave_init - (int) Math.floor(i / 2);
 						i_next.setDescription(ave_current + " Ave and " + st_current + " St");
 						i_next.addRoute(ave_current + " Ave");
 						i_next.addRoute(st_current + " St");
