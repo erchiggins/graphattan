@@ -18,7 +18,7 @@ The Java project in this repository exposes an API which generates a JSON repres
 ``
 
 ### Visualization and Path Modeling
-This being a bit of a Frankenproject, because Python lends itself more naturally to this sort of thing, parsing the generated CityGraphs and modeling/displaying traversals is implemented [here]() using networkx and matplotlib. For now, traffic light and pedestrian signal timings are ignored.
+This being a bit of a Frankenproject, and because Python lends itself more naturally to this sort of thing, parsing the generated CityGraphs and modeling/displaying traversals is implemented [here](https://github.com/erchiggins/take-a-walk) using networkx and matplotlib. For now, traffic light and pedestrian signal timings are ignored.
 
 ### Availability Functions
 - TODO
