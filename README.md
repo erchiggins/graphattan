@@ -10,13 +10,15 @@ about walking commutes in Manhattan. A shared dislike of waiting at intersection
 
 ### CityGraph
 - Basic CityGraph model is described [here](https://github.com/erchiggins/graphattan/wiki/CityGraph).
-- Construction of a simple, programmatically generated grid based on Midtown Manhattan is described [here](https://github.com/erchiggins/graphattan/wiki/MidtownGraphBuilder).
+- Simple, programmatically generated grid based on Midtown Manhattan is described [here](https://github.com/erchiggins/graphattan/wiki/MidtownGraphBuilder).
+
+### Generation API
+The Java project in this repository exposes an API which generates a JSON representation of a CityGraph DTO, with some nonessential (for basic traverals) information stripped away. It is presently hosted at `http://graphattan.us-west-1.elasticbeanstalk.com/graph` and queries should pass the parameters `?start_st={start_st}&start_ave={start_ave}&start_corner={start_corner}&finish_st={finish_st}&finish_ave={finish_ave}&finish_corner={finish_corner}`, e.g. 
+```graphattan.us-west-1.elasticbeanstalk.com/graph?start_st=49&start_ave=1&start_corner=NE&finish_st=53&finish_ave=3&finish_corner=NE
+```
+
+### Visualization and Path Modeling
+This being a bit of a Frankenproject, because Python lends itself more naturally to this sort of thing, parsing the generated CityGraphs and modeling/displaying traversals is implemented [here]() using networkx and matplotlib. For now, traffic light and pedestrian signal timings are ignored.
 
 ### Availability Functions
-- TODO
-
-### Path Modeling
-- TODO
-
-### Visualization
 - TODO
