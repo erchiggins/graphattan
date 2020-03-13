@@ -249,7 +249,7 @@ public class MidtownGraphBuilder extends GraphBuilder {
 	// northSouth indicates whether this horizontal is the North or South side of a
 	// Street (true=North, false=South)
 	public Vertex[] addHorizontal(Vertex[] old_horizontal, boolean north) {
-		// old_horizontal==null should always occur with north==false, otherwise GTFO
+		// old_horizontal==null should always occur with north==false
 		if (old_horizontal == null && north)
 			return null;
 		// Array of new Vertices to be returned
